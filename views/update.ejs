@@ -1,0 +1,30 @@
+<%- include('partials/header')%>
+<!--  -->
+<%- include('partials/nav')%>
+<form class="m-auto w-25 mt-5" action="/update/<%= user._id%>" method="post">
+    <h1 class="mb-4">Update Page</h1>
+    <input
+        class="form-control mb-3"
+        type="text"
+        placeholder="johndoe"
+        name="username"
+        value="<%= user.username%>"
+    />
+    <input
+        class="form-control mb-3"
+        type="email"
+        placeholder="example@john.com"
+        name="email"
+        value="<%= user.email%>"
+    />
+    <input
+        class="form-control mb-3"
+        type="password"
+        placeholder="********"
+        name="password"
+        disabled
+    />
+    <button class="btn btn-primary w-25">Update</button>
+</form>
+
+<%- include('partials/footer')%>
