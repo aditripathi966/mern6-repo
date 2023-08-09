@@ -94,6 +94,15 @@ router.post("/get-email", async function (req, res, next) {
                 `User not found. <a href="/get-email">Forget Password</a>`
             );
         }
+        console.log(
+            req.protocol +
+                "://" +
+                req.get("host") +
+                "/change-password/" +
+                user._id
+        );
+        // http://localhost:3000/change-password/64d2503cb480a2d1dbc932e6
+        // code of sending mail....
         res.redirect("/change-password/" + user._id);
     } catch (error) {
         res.send(error);
@@ -116,7 +125,7 @@ router.post("/change-password/:id", async function (req, res, next) {
     }
 });
 
-router.get("/reset/:id", async function (req, res, next) {
+router.get("/reset/:id", isLoggedIn, async function (req, res, next) {
     res.render("reset", {
         title: "Reset Password",
         id: req.params.id,
@@ -124,17 +133,10 @@ router.get("/reset/:id", async function (req, res, next) {
     });
 });
 
-router.post("/reset/:id", async function (req, res, next) {
+router.post("/reset/:id", isLoggedIn, async function (req, res, next) {
     try {
-        const { oldpassword, password } = req.body;
-        const user = await UserModel.findById(req.params.id);
-
-        if (oldpassword !== user.password) {
-            return res.send(
-                `Incorrect Password. <a href="/reset/${user._id}">Reset Again</a>`
-            );
-        }
-        await UserModel.findByIdAndUpdate(req.params.id, req.body);
+        await req.user.changePassword(req.body.oldpassword, req.body.password);
+        await req.user.save();
         res.redirect("/profile");
     } catch (error) {
         res.send(error);
