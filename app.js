@@ -8,8 +8,8 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 const passport = require("passport");
-const UserModel = require("./models/userModel");
 const session = require("express-session");
+const UserModel = require("./models/userModel");
 
 // db connection
 require("./models/db");
@@ -26,12 +26,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// passport boilerplate
+// passport init
 app.use(
     session({
-        saveUninitialized: false,
         resave: false,
-        secret: "jkdso98ew",
+        saveUninitialized: false,
+        secret: "asbd349",
     })
 );
 app.use(passport.initialize());

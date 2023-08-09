@@ -3,35 +3,30 @@ var router = express.Router();
 const UserModel = require("../models/userModel");
 
 const passport = require("passport");
-const LocalStartegy = require("passport-local");
+const LocalStrategy = require("passport-local");
 
-passport.use(new LocalStartegy(UserModel.authenticate()));
+passport.use(new LocalStrategy(UserModel.authenticate()));
 
 router.get("/", function (req, res, next) {
-    res.render("index", { title: "Homepage" });
+    res.render("index", { title: "Homepage", user: req.user });
 });
 
 router.get("/signup", function (req, res, next) {
-    res.render("signup", { title: "Sign-Up" });
+    res.render("signup", { title: "Sign-Up", user: req.user });
 });
 
 router.post("/signup", async function (req, res, next) {
     try {
         const { username, password, email } = req.body;
-
-        const newuser = new UserModel({ username, email });
-
-        const user = await UserModel.register(newuser, password);
-
-        // await newuser.save();
+        const user = await UserModel.register({ username, email }, password);
         res.redirect("/signin");
     } catch (error) {
-        res.send(error);
+        res.send(error.message);
     }
 });
 
 router.get("/signin", function (req, res, next) {
-    res.render("signin", { title: "Sign-In" });
+    res.render("signin", { title: "Sign-In", user: req.user });
 });
 
 router.post(
@@ -53,7 +48,7 @@ router.get("/profile", isLoggedIn, async function (req, res, next) {
     }
 });
 
-router.get("/signout", isLoggedIn, async function (req, res, next) {
+router.get("/signout", async function (req, res, next) {
     req.logout(() => {
         res.redirect("/signin");
     });
@@ -70,8 +65,8 @@ router.get("/delete/:id", async function (req, res, next) {
 
 router.get("/update/:id", async function (req, res, next) {
     try {
-        const user = await UserModel.findById(req.params.id);
-        res.render("update", { title: "Update", user });
+        const User = await UserModel.findById(req.params.id);
+        res.render("update", { title: "Update", User, user: req.user });
     } catch (error) {
         res.send(error);
     }
@@ -87,7 +82,7 @@ router.post("/update/:id", async function (req, res, next) {
 });
 
 router.get("/get-email", function (req, res, next) {
-    res.render("getemail", { title: "Forget-Password" });
+    res.render("getemail", { title: "Forget-Password", user: req.user });
 });
 
 router.post("/get-email", async function (req, res, next) {
@@ -122,7 +117,11 @@ router.post("/change-password/:id", async function (req, res, next) {
 });
 
 router.get("/reset/:id", async function (req, res, next) {
-    res.render("reset", { title: "Reset Password", id: req.params.id });
+    res.render("reset", {
+        title: "Reset Password",
+        id: req.params.id,
+        user: req.user,
+    });
 });
 
 router.post("/reset/:id", async function (req, res, next) {
