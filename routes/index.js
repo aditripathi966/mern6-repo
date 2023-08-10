@@ -4,6 +4,7 @@ const UserModel = require("../models/userModel");
 
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const { sendmail } = require("../utils/mail");
 
 passport.use(new LocalStrategy(UserModel.authenticate()));
 
@@ -94,16 +95,7 @@ router.post("/get-email", async function (req, res, next) {
                 `User not found. <a href="/get-email">Forget Password</a>`
             );
         }
-        console.log(
-            req.protocol +
-                "://" +
-                req.get("host") +
-                "/change-password/" +
-                user._id
-        );
-        // http://localhost:3000/change-password/64d2503cb480a2d1dbc932e6
-        // code of sending mail....
-        res.redirect("/change-password/" + user._id);
+        sendmail(req, res, user);
     } catch (error) {
         res.send(error);
     }
@@ -113,12 +105,23 @@ router.get("/change-password/:id", function (req, res, next) {
     res.render("changepassword", {
         title: "Change Password",
         id: req.params.id,
+        user: null,
     });
 });
 
 router.post("/change-password/:id", async function (req, res, next) {
     try {
-        await UserModel.findByIdAndUpdate(req.params.id, req.body);
+        const user = await UserModel.findById(req.params.id);
+        if (user.passwordResetToken === 1) {
+            await user.setPassword(req.body.password);
+            user.passwordResetToken = 0;
+        } else {
+            res.send(
+                `link expired try again <a href="/get-email">Forget Password</a>`
+            );
+        }
+        await user.save();
+
         res.redirect("/signin");
     } catch (error) {
         res.send(error);

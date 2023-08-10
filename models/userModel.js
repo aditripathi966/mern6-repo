@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const plm = require("passport-local-mongoose");
 
 const userModel = new mongoose.Schema({
+    passwordResetToken: {
+        type: Number,
+        default: 0,
+    },
     username: {
         type: String,
         trim: true,
