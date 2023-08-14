@@ -1,31 +1,39 @@
 <%- include('partials/header')%>
 <!--  -->
 <%- include('partials/nav')%>
-<div class="container bg-light p-5">
-    <h1>User Profile</h1>
-    <p>Welcome to <%= user.username%> profile</p>
-    <hr />
-    <h3>List Of All Users</h3>
-    <ul class="list-group w-25">
-        <% users.forEach((user) => { %>
-        <li
-            class="list-group-item border-0 mb-3 d-flex justify-content-between"
-        >
-            <%= user.username%>
-            <span>
-                <a class="text-decoration-none" href="/update/<%= user._id%>"
-                    >✏️</a
-                >
-                <a class="text-decoration-none" href="/delete/<%= user._id%>"
-                    >❌</a
-                >
-                <a class="text-decoration-none" href="/reset/<%= user._id%>"
-                    >🔏</a
-                >
-            </span>
-        </li>
-        <%})%>
-    </ul>
+<div class="w-50 d-flex align-items-center container mt-3">
+    <img
+        height="100"
+        width="100"
+        style="object-fit: cover"
+        class="rounded-circle me-5"
+        src="/images/<%= user.avatar %>"
+        alt=""
+    />
+    <form action="/avatar" method="post" enctype="multipart/form-data">
+        <input class="form-control mb-3" type="file" name="avatar" />
+        <button class="btn btn-danger">Upload Photo</button>
+    </form>
 </div>
+
+<hr class="container my-3" />
+<form class="m-auto w-50 mt-5" action="/profile" method="post">
+    <h1 class="mb-4">User Profile Page</h1>
+    <input
+        class="form-control mb-3"
+        type="text"
+        placeholder="johndoe"
+        name="username"
+        value="<%= user.username%>"
+    />
+    <input
+        class="form-control mb-3"
+        type="email"
+        placeholder="example@john.com"
+        name="email"
+        value="<%= user.email%>"
+    />
+    <button class="btn btn-primary w-25">Update Profile</button>
+</form>
 
 <%- include('partials/footer')%>

@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 const UserModel = require("../models/userModel");
 
+const upload = require("../utils/multer");
+
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const { sendmail } = require("../utils/mail");
@@ -34,20 +36,42 @@ router.post(
     "/signin",
     passport.authenticate("local", {
         failureRedirect: "/signin",
-        successRedirect: "/profile",
+        successRedirect: "/home",
     }),
     function (req, res, next) {}
 );
 
-router.get("/profile", isLoggedIn, async function (req, res, next) {
+router.get("/home", isLoggedIn, async function (req, res, next) {
     try {
         console.log(req.user);
         const users = await UserModel.find();
-        res.render("profile", { title: "Profile", users, user: req.user });
+        res.render("home", { title: "Homepage", users, user: req.user });
     } catch (error) {
         res.send(error);
     }
 });
+
+router.get("/profile", isLoggedIn, async function (req, res, next) {
+    try {
+        res.render("profile", { title: "Profile", user: req.user });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+router.post(
+    "/avatar",
+    upload.single("avatar"),
+    isLoggedIn,
+    async function (req, res, next) {
+        try {
+            console.log(req.file.filename);
+            res.redirect("/profile");
+        } catch (error) {
+            res.send(error);
+        }
+    }
+);
 
 router.get("/signout", async function (req, res, next) {
     req.logout(() => {

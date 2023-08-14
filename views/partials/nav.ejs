@@ -2,9 +2,7 @@
     <h1>Logo</h1>
     <ul class="d-flex gap-5 list-unstyled">
         <li>
-            <a
-                class="text-decoration-none"
-                href="<%= user ? '/profile' : '/' %>"
+            <a class="text-decoration-none" href="<%= user ? '/home' : '/' %>"
                 >Home</a
             >
         </li>
@@ -18,6 +16,7 @@
                 >Reset</a
             >
         </li>
+        <li><a class="text-decoration-none" href="/profile">Profile</a></li>
         <li><a class="text-decoration-none" href="/signout">SignOut</a></li>
         <%}%>
     </ul>
