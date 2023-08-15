@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const UserModel = require("../models/userModel");
+const fs = require("fs");
 
 const upload = require("../utils/multer");
 
@@ -65,7 +66,11 @@ router.post(
     isLoggedIn,
     async function (req, res, next) {
         try {
-            console.log(req.file.filename);
+            if (req.user.avatar !== "default.jpg") {
+                fs.unlinkSync("./public/images/" + req.user.avatar);
+            }
+            req.user.avatar = req.file.filename;
+            req.user.save();
             res.redirect("/profile");
         } catch (error) {
             res.send(error);
