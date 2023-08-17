@@ -29,6 +29,7 @@ const userModel = new mongoose.Schema({
         type: String,
         default: "default.jpg",
     },
+    todos: [{ type: mongoose.Schema.Types.ObjectId, ref: "todo" }],
 });
 
 userModel.plugin(plm);
