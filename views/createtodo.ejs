@@ -1,0 +1,21 @@
+<%- include('partials/header')%>
+<!--  -->
+<%- include('partials/nav')%>
+<form class="m-auto w-25 mt-5" action="/createtodo" method="post">
+    <h1 class="mb-4">Create Todo Page</h1>
+    <input
+        class="form-control mb-3"
+        type="text"
+        placeholder="title"
+        name="title"
+    />
+    <textarea
+        name="description"
+        placeholder="enter text here..."
+        class="form-control"
+    ></textarea>
+    <button class="mt-3 btn btn-primary w-25">Create</button>
+    <p>Want to go to homepage ? <a href="/home">Home</a></p>
+</form>
+
+<%- include('partials/footer')%>

@@ -2,21 +2,22 @@
 <!--  -->
 <%- include('partials/nav')%>
 <div class="container bg-light p-5">
-    <h1>User Profile</h1>
-    <p>Welcome to <%= user.username%> profile</p>
+    <h1>List Of Pending Todos...</h1>
+    <p>Welcome to <strong> <%= user.username%></strong> profile</p>
     <hr />
-    <h3>List Of All Users</h3>
+    <h3>Create Todo <a class="btn btn-primary" href="/createtodo">+</a></h3>
     <ul class="list-group w-25">
-        <% users.forEach((user) => { %>
+        <% todos.forEach((todo) => { %>
         <li
             class="list-group-item border-0 mb-3 d-flex justify-content-between"
         >
-            <%= user.username%>
+            <%= todo.title%> <br />
+            <%= todo.description %>
             <span>
-                <a class="text-decoration-none" href="/update/<%= user._id%>"
+                <a class="text-decoration-none" href="/update/<%= todo._id%>"
                     >✏️</a
                 >
-                <a class="text-decoration-none" href="/delete/<%= user._id%>"
+                <a class="text-decoration-none" href="/delete/<%= todo._id%>"
                     >❌</a
                 >
                 <a class="text-decoration-none" href="/reset/<%= user._id%>"
