@@ -6,22 +6,31 @@
     <p>Welcome to <strong> <%= user.username%></strong> profile</p>
     <hr />
     <h3>Create Todo <a class="btn btn-primary" href="/createtodo">+</a></h3>
-    <ul class="list-group w-25">
+    <ul class="list-group w-50">
         <% todos.forEach((todo) => { %>
         <li
             class="list-group-item border-0 mb-3 d-flex justify-content-between"
         >
-            <%= todo.title%> <br />
-            <%= todo.description %>
+            <div>
+                <strong class="h4"><%= todo.title%></strong>
+                <br />
+                <span class="h6 text-muted"
+                    ><%= todo.createdAt.toLocaleDateString() %></span
+                >
+                <br />
+
+                <span class="h5"> <%= todo.description %> </span>
+            </div>
             <span>
-                <a class="text-decoration-none" href="/update/<%= todo._id%>"
+                <a
+                    class="text-decoration-none"
+                    href="/updatetodo/<%= todo._id%>"
                     >✏️</a
                 >
-                <a class="text-decoration-none" href="/delete/<%= todo._id%>"
+                <a
+                    class="text-decoration-none"
+                    href="/deletetodo/<%= todo._id%>"
                     >❌</a
-                >
-                <a class="text-decoration-none" href="/reset/<%= user._id%>"
-                    >🔏</a
                 >
             </span>
         </li>

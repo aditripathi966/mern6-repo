@@ -205,4 +205,35 @@ router.post("/createtodo", isLoggedIn, async function (req, res, next) {
     }
 });
 
+router.get("/updatetodo/:id", isLoggedIn, async function (req, res, next) {
+    try {
+        const todo = await TodoModel.findById(req.params.id);
+        res.render("updatetodo", {
+            title: "Update Todo",
+            user: req.user,
+            todo,
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+router.post("/updatetodo/:id", isLoggedIn, async function (req, res, next) {
+    try {
+        await TodoModel.findByIdAndUpdate(req.params.id, req.body);
+        res.redirect("/home");
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+router.get("/deletetodo/:id", isLoggedIn, async function (req, res, next) {
+    try {
+        await TodoModel.findByIdAndDelete(req.params.id);
+        res.redirect("/home");
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 module.exports = router;
